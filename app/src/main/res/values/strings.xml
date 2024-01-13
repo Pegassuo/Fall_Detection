@@ -1,0 +1,8 @@
+<resources>
+    <!-- COLORES -->
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
+    <!-- STRINGS -->
+    <string name="app_title">Fall Detection</string>
+    <string name="init_values">Collecting Data...</string>
+</resources>
