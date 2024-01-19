@@ -30,7 +30,7 @@ class MainActivity : ComponentActivity(), SensorEventListener {
     //Timestamp for time-based analysis
     private var lastSensorTimestamp : Long = 0L
     //Flag
-    private var isFallDetected : Boolean = false
+    private var wasFallDetected : Boolean = false
     private companion object{
         //private const val ALPHA = 0.7f
         private const val CHANGE_THRESHOLD = 10.0f
@@ -57,28 +57,23 @@ class MainActivity : ComponentActivity(), SensorEventListener {
         val currentAccelerationMagnitude = calculateMagnitude(event.values)
         val accelerationChange = currentAccelerationMagnitude - previousAccelerationMagnitude
         val verticalAccelerationChange = verticalAcceleration - previousVerticalAcceleration
-        //If accuracy is unreliable do nothing
+
         if(event.accuracy == SensorManager.SENSOR_STATUS_UNRELIABLE){
             return;
         }
-        //A fall is detected
-        if (accelerationChange > CHANGE_THRESHOLD &&
-            currentAccelerationMagnitude > MAGNITUDE_THRESHOLD &&
-            verticalAccelerationChange < VERTICAL_THRESHOLD) {
-            //Condition to make it trigger only one time per fall
-            if(!isFallDetected){
-                //mLinearLayout.setBackgroundColor(Color.BLUE)
-                Log.d(TAG, "Fall detected")
-                //
-            }
+
+        var fallDetected = (accelerationChange > CHANGE_THRESHOLD &&
+                currentAccelerationMagnitude > MAGNITUDE_THRESHOLD &&
+                verticalAccelerationChange < VERTICAL_THRESHOLD)
+
+        if (fallDetected && !wasFallDetected) {
+            //mLinearLayout.setBackgroundColor(Color.BLUE)
+            Log.d(TAG, "Fall detected")
         }
 
         previousVerticalAcceleration = verticalAcceleration
         previousAccelerationMagnitude = currentAccelerationMagnitude
-        //The flag is updated with the boolean value if a wall was/wasn't detected
-        isFallDetected = (accelerationChange > CHANGE_THRESHOLD &&
-                currentAccelerationMagnitude > MAGNITUDE_THRESHOLD &&
-                verticalAccelerationChange < VERTICAL_THRESHOLD)
+        wasFallDetected = fallDetected
 
         mTextView.text = "X = ${event.values[0]}" +
                 "\nY = ${event.values[1]}" +
