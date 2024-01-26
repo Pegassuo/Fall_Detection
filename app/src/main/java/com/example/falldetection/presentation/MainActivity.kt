@@ -13,9 +13,6 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.activity.ComponentActivity
 import com.example.falldetection.R
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.*
-import java.io.File
 import kotlin.math.sqrt
 
 class MainActivity : ComponentActivity(), SensorEventListener {
@@ -30,7 +27,8 @@ class MainActivity : ComponentActivity(), SensorEventListener {
     private var previousVerticalAcceleration = 0.0f
     //Flag
     private var wasFallDetected : Boolean = false
-    val file = File("FallData.json")
+    val storeFall = StoreFall()
+
     private companion object{
         private const val CHANGE_THRESHOLD = 10.0f
         private const val MAGNITUDE_THRESHOLD = 20.0f
@@ -44,6 +42,9 @@ class MainActivity : ComponentActivity(), SensorEventListener {
         mLinearLayout = findViewById(R.id.root)
         sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
         acceSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+
+        //Check for info
+        //storeFall.saveData(this)
     }
 
     @SuppressLint("SetTextI18n")
@@ -62,15 +63,7 @@ class MainActivity : ComponentActivity(), SensorEventListener {
                 verticalAccelerationChange < VERTICAL_THRESHOLD)
 
         if (fallDetected && !wasFallDetected) {
-            //mLinearLayout.setBackgroundColor(Color.BLUE)
-            val dataFall = DataFall(
-                id = 1,
-                ubicacion = "Guayaquil, Guayas, Ecuador",
-                fecha = "2024-01-23",
-                hora = "12:35:00"
-            )
             Log.d(TAG, "Fall detected")
-            Log.d(TAG, "Registro creado con exito ${Json.encodeToString(dataFall)}")
         }
 
         previousVerticalAcceleration = verticalAcceleration
