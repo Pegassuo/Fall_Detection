@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.chip.Chip xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/chip"
+    android:layout_width="160dp"
+    android:layout_height="55dp"
+    android:clickable="true"
+    android:checkable="false"
+    android:theme="@style/Theme.MaterialComponents.Light"
+    style="@style/Widget.MaterialComponents.Chip.Entry">
+
+</com.google.android.material.chip.Chip>
