@@ -2,7 +2,11 @@
     <!-- COLORES -->
     <color name="black">#000000</color>
     <color name="white">#FFFFFF</color>
+    <color name="purple">#BB86FC</color>
     <!-- STRINGS -->
     <string name="app_title">Fall Detection</string>
     <string name="init_values">Collecting Data...</string>
+    <string name="send_alert">Send Alert!</string>
+    <string name="contacts">Add Contacts</string>
+    <string name="chip_placeholder">Chip Placeholder</string>
 </resources>
