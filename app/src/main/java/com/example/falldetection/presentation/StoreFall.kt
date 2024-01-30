@@ -1,6 +1,5 @@
 package com.example.falldetection.presentation
 
-import java.io.File
 import android.util.Log
 import android.content.ContentValues.TAG
 import android.content.Context
@@ -19,15 +18,17 @@ class StoreFall {
     private val timeFomat: DateTimeFormatter = DateTimeFormatter.ofPattern("hh:mm a")
 
     fun saveData(context: Context){
-        val data = getData(context);
+        var data : MutableList<DataFall>? = getData(context) as? MutableList<DataFall>
+        Log.d(TAG, data.toString())
         if(data != null){
-            val dataFall = DataFall(
+            val newFall = DataFall(
                 id = data.last().id + 1,
                 ubicacion = "Guayaquil, Guayas, Ecuador",
                 fecha = LocalDate.now().format(dateFormat),
                 hora = LocalTime.now().format(timeFomat)
             )
-            Log.d(TAG, "Registro creado con exito ${Json.encodeToString(dataFall)}")
+            data.add(newFall)
+            Log.d(TAG, "Registro creado con exito ${Json.encodeToString(newFall)}")
         }else{
             Log.d(TAG, "Fall could'nt be created")
         }
