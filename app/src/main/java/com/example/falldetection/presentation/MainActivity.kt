@@ -9,9 +9,9 @@ import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.os.Bundle
 import android.util.Log
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.view.ViewGroup
 import androidx.activity.ComponentActivity
+import androidx.recyclerview.widget.RecyclerView
 import com.example.falldetection.R
 import kotlin.math.sqrt
 
@@ -19,15 +19,14 @@ class MainActivity : ComponentActivity(), SensorEventListener {
     //Sensors
     private lateinit var sensorManager: SensorManager
     private lateinit var acceSensor: Sensor
-    //Layout
-    private lateinit var mTextView: TextView
-    private lateinit var mLinearLayout: LinearLayout
     //Magnitudes
     private var previousAccelerationMagnitude = 0.0f
     private var previousVerticalAcceleration = 0.0f
     //Flag
     private var wasFallDetected : Boolean = false
     val storeFall = StoreFall()
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var adapter: ChipAdapter
 
     private companion object{
         private const val CHANGE_THRESHOLD = 10.0f
@@ -38,13 +37,18 @@ class MainActivity : ComponentActivity(), SensorEventListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main)
 
-        mTextView = findViewById(R.id.text_values)
-        mLinearLayout = findViewById(R.id.root)
         sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
-        acceSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+        acceSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)!!
 
-        //Check for info
-        //storeFall.saveData(this)
+        val dataFallList = storeFall.getData(this) as? MutableList<DataFall>
+
+        recyclerView = findViewById(R.id.recycler_view)
+        //Load history of falls
+        if (dataFallList != null){
+            val adapter = ChipAdapter(dataFallList)
+            recyclerView.adapter = adapter
+            adapter.notifyDataSetChanged()
+        }
     }
 
     @SuppressLint("SetTextI18n")
@@ -69,11 +73,6 @@ class MainActivity : ComponentActivity(), SensorEventListener {
         previousVerticalAcceleration = verticalAcceleration
         previousAccelerationMagnitude = currentAccelerationMagnitude
         wasFallDetected = fallDetected
-
-        mTextView.text = "X = ${event.values[0]}" +
-                "\nY = ${event.values[1]}" +
-                "\nZ = ${event.values[2]}" +
-                "\nMagnitude = $currentAccelerationMagnitude"
     }
     private fun calculateMagnitude(values: FloatArray): Float{
         return sqrt(values[0] * values[0] + values[1] * values[1] + values[2] * values[2])
@@ -91,5 +90,10 @@ class MainActivity : ComponentActivity(), SensorEventListener {
     override fun onResume() {
         super.onResume()
         sensorManager.registerListener(this, acceSensor, SensorManager.SENSOR_DELAY_NORMAL)
+    }
+
+    fun loadData(container: ViewGroup, dataFallList: MutableList<DataFall>){
+        adapter = ChipAdapter(dataFallList)
+        recyclerView.adapter = adapter
     }
 }
