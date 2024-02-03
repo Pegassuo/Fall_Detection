@@ -9,7 +9,6 @@
     android:background="@color/black">
 
     <TextView
-        android:id="@+id/text_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -30,6 +29,7 @@
                     android:orientation="vertical">
 
                     <Button
+                        android:id="@+id/sendAlertBtn"
                         android:layout_width="170dp"
                         android:layout_height="40dp"
                         android:layout_marginTop="3dp"
@@ -37,6 +37,7 @@
                         android:text="@string/send_alert"/>
 
                     <Button
+                        android:id="@+id/contactsBtn"
                         android:layout_width="170dp"
                         android:layout_height="40dp"
                         android:layout_marginTop="3dp"
