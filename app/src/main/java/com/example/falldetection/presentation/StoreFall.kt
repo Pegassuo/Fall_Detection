@@ -7,6 +7,7 @@ import kotlinx.serialization.*
 import kotlinx.serialization.json.Json
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import java.io.File
 import java.io.IOException
 import java.time.LocalDate
 import java.time.LocalTime
@@ -18,36 +19,48 @@ class StoreFall {
     private val timeFomat: DateTimeFormatter = DateTimeFormatter.ofPattern("hh:mm a")
 
     fun saveData(context: Context){
-        var data : MutableList<DataFall>? = getData(context) as? MutableList<DataFall>
-        Log.d(TAG, data.toString())
-        if(data != null){
-            val newFall = DataFall(
-                id = data.last().id + 1,
-                ubicacion = "Guayaquil, Guayas, Ecuador",
-                fecha = LocalDate.now().format(dateFormat),
-                hora = LocalTime.now().format(timeFomat)
-            )
-            data.add(newFall)
-            Log.d(TAG, "Registro creado con exito ${Json.encodeToString(newFall)}")
-        }else{
-            Log.d(TAG, "Fall could'nt be created")
-        }
-
+        val retreivedData = getData(context) ?: mutableListOf()
+        val newFallID = if(retreivedData.isEmpty()) 1 else retreivedData.last().id + 1
+        val newFall = DataFall(
+            id = newFallID,
+            ubicacion = "Guayaquil, Guayas, Ecuador",
+            fecha = LocalDate.now().format(dateFormat),
+            hora = LocalTime.now().format(timeFomat)
+        )
+        retreivedData.add(newFall)
+        saveJson(context, retreivedData)
     }
 
-    fun getData(context: Context): List<DataFall>? {
+    fun saveJson(context: Context, data: MutableList<DataFall>){
+        val jsonString = Json.encodeToString(data)
+        try{
+            val fileOutputStream = context.openFileOutput("data.json", Context.MODE_PRIVATE)
+            fileOutputStream.write(jsonString.toByteArray())
+            fileOutputStream.close()
+            Log.d(TAG, "Data saved to JSON file successfully")
+
+        }catch(e: Exception){
+            Log.e(TAG, "Error saving data to JSON file: ${e.message}")
+        }
+    }
+
+    fun getData(context: Context): MutableList<DataFall>? {
+        val file = File(context.filesDir, "data.json")
         lateinit var jsonString: String
 
-        try {
-            jsonString = context.assets.open("FallInfo.json")
-                .bufferedReader()
-                .use { it.readText() }
-        } catch (ioException: IOException) {
-            Log.d(TAG, ioException.toString())
+        try{
+            if(file.exists())
+                jsonString = file.bufferedReader().use { it.readText() }
+            else{
+                Log.w(TAG, "JSON file not found on internal storage")
+                return null
+            }
+        }catch(ioException: IOException){
+            Log.e(TAG, "Error reading file: ${ioException.message}")
+            return null
         }
 
         val listDataFall = object : TypeToken<List<DataFall>>() {}.type
         return gson.fromJson(jsonString, listDataFall)
     }
-
 }
