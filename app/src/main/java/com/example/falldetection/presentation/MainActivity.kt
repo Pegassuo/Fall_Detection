@@ -1,15 +1,14 @@
 package com.example.falldetection.presentation
 
 import android.annotation.SuppressLint
-import android.content.ContentValues.TAG
 import android.content.Context
+import android.content.Intent
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.os.Bundle
-import android.util.Log
-import android.view.ViewGroup
+import android.widget.Button
 import androidx.activity.ComponentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.falldetection.R
@@ -24,8 +23,11 @@ class MainActivity : ComponentActivity(), SensorEventListener {
     private var previousVerticalAcceleration = 0.0f
     //Flag
     private var wasFallDetected : Boolean = false
-    val storeFall = StoreFall()
+    private val storeFall = StoreFall()
     private lateinit var recyclerView: RecyclerView
+    //Button
+    private lateinit var sendAlertButton: Button
+    private lateinit var contactsButton: Button
     private lateinit var adapter: ChipAdapter
 
     private companion object{
@@ -40,14 +42,27 @@ class MainActivity : ComponentActivity(), SensorEventListener {
         sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
         acceSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)!!
 
-        val dataFallList = storeFall.getData(this) as? MutableList<DataFall>
-
+        sendAlertButton = findViewById(R.id.sendAlertBtn)
+        contactsButton = findViewById(R.id.contactsBtn)
         recyclerView = findViewById(R.id.recycler_view)
+
+        val dataFallList = storeFall.getData(this)
+
         //Load history of falls
         if (dataFallList != null){
             val adapter = ChipAdapter(dataFallList)
             recyclerView.adapter = adapter
             adapter.notifyDataSetChanged()
+        }
+
+        sendAlertButton.setOnClickListener{
+            val intent = Intent(this, AlertActivity::class.java)
+            startActivity(intent)
+        }
+
+        contactsButton.setOnClickListener{
+            val intent = Intent(this, ContactsActivity::class.java)
+            startActivity(intent)
         }
     }
 
@@ -67,7 +82,8 @@ class MainActivity : ComponentActivity(), SensorEventListener {
                 verticalAccelerationChange < VERTICAL_THRESHOLD)
 
         if (fallDetected && !wasFallDetected) {
-            Log.d(TAG, "Fall detected")
+            val intent = Intent(this, AlertActivity::class.java)
+            startActivity(intent)
         }
 
         previousVerticalAcceleration = verticalAcceleration
@@ -90,10 +106,12 @@ class MainActivity : ComponentActivity(), SensorEventListener {
     override fun onResume() {
         super.onResume()
         sensorManager.registerListener(this, acceSensor, SensorManager.SENSOR_DELAY_NORMAL)
+        val dataFallList = storeFall.getData(this)
+        if (dataFallList != null){
+            adapter = ChipAdapter(dataFallList)
+            recyclerView.adapter = adapter
+            adapter.notifyDataSetChanged()
+        }
     }
 
-    fun loadData(container: ViewGroup, dataFallList: MutableList<DataFall>){
-        adapter = ChipAdapter(dataFallList)
-        recyclerView.adapter = adapter
-    }
 }
