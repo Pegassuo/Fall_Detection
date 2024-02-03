@@ -40,6 +40,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".presentation.AlertActivity"
+            android:label="Alert"
+            android:theme="@android:style/Theme.DeviceDefault">
+        </activity>
+
+        <activity
+            android:name=".presentation.ContactsActivity"
+            android:label="Alert"
+            android:theme="@android:style/Theme.DeviceDefault">
+        </activity>
     </application>
 
 </manifest>
