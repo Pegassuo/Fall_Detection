@@ -1,18 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/contactsRoot"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:background="@color/black">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:gravity="center"
         android:textSize="20sp"
         android:layout_marginTop="25dp"
         android:textStyle="bold"
         android:textColor="@color/white"
+        android:layout_gravity="center"
         android:text="Contacts" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal">
+
+        <EditText
+            android:id="@+id/textName"
+            android:layout_width="100sp"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:ems="10"
+            android:inputType="text"
+            android:text="Name" />
+
+        <EditText
+            android:id="@+id/textPhone"
+            android:layout_width="100sp"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:ems="10"
+            android:inputType="phone"
+            android:text="Phone" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/saveContactButton"
+        android:layout_width="wrap_content"
+        android:layout_height="30sp"
+        android:layout_marginTop="3dp"
+        android:background="@drawable/rounded_button"
+        android:layout_gravity="center"
+        android:text="@string/save"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view_contacts"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        android:nestedScrollingEnabled="false">
+
+    </androidx.recyclerview.widget.RecyclerView>
+
 
 </LinearLayout>
