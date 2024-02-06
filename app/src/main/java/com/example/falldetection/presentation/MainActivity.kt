@@ -23,12 +23,11 @@ class MainActivity : ComponentActivity(), SensorEventListener {
     private var previousVerticalAcceleration = 0.0f
     //Flag
     private var wasFallDetected : Boolean = false
-    private val storeFall = StoreFall()
+    private val storeData = StoreData()
     private lateinit var recyclerView: RecyclerView
     //Button
     private lateinit var sendAlertButton: Button
     private lateinit var contactsButton: Button
-    private lateinit var adapter: ChipAdapter
 
     private companion object{
         private const val CHANGE_THRESHOLD = 10.0f
@@ -46,11 +45,11 @@ class MainActivity : ComponentActivity(), SensorEventListener {
         contactsButton = findViewById(R.id.contactsBtn)
         recyclerView = findViewById(R.id.recycler_view)
 
-        val dataFallList = storeFall.getData(this)
+        val dataFallList = storeData.getData(this, DataFall::class.java)
 
         //Load history of falls
         if (dataFallList != null){
-            val adapter = ChipAdapter(dataFallList)
+            val adapter = ChipAdapter<DataFall>(dataFallList)
             recyclerView.adapter = adapter
             adapter.notifyDataSetChanged()
         }
@@ -68,16 +67,16 @@ class MainActivity : ComponentActivity(), SensorEventListener {
 
     @SuppressLint("SetTextI18n")
     override fun onSensorChanged(event: SensorEvent) {
+        if(event.accuracy == SensorManager.SENSOR_STATUS_UNRELIABLE){
+            return;
+        }
+
         val verticalAcceleration = event.values[2]
         val currentAccelerationMagnitude = calculateMagnitude(event.values)
         val accelerationChange = currentAccelerationMagnitude - previousAccelerationMagnitude
         val verticalAccelerationChange = verticalAcceleration - previousVerticalAcceleration
 
-        if(event.accuracy == SensorManager.SENSOR_STATUS_UNRELIABLE){
-            return;
-        }
-
-        var fallDetected = (accelerationChange > CHANGE_THRESHOLD &&
+        val fallDetected = (accelerationChange > CHANGE_THRESHOLD &&
                 currentAccelerationMagnitude > MAGNITUDE_THRESHOLD &&
                 verticalAccelerationChange < VERTICAL_THRESHOLD)
 
@@ -106,9 +105,9 @@ class MainActivity : ComponentActivity(), SensorEventListener {
     override fun onResume() {
         super.onResume()
         sensorManager.registerListener(this, acceSensor, SensorManager.SENSOR_DELAY_NORMAL)
-        val dataFallList = storeFall.getData(this)
-        if (dataFallList != null){
-            adapter = ChipAdapter(dataFallList)
+        val dataFallList = storeData.getData(this, DataFall::class.java)
+        if (dataFallList != null) {
+            val adapter = ChipAdapter<DataFall>(dataFallList)
             recyclerView.adapter = adapter
             adapter.notifyDataSetChanged()
         }

@@ -5,11 +5,16 @@ import android.os.CountDownTimer
 import android.widget.ProgressBar
 import androidx.activity.ComponentActivity
 import com.example.falldetection.R
+import java.time.LocalDate
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 
 class AlertActivity: ComponentActivity() {
     private lateinit var progressBar: ProgressBar
-    val storeFall = StoreFall()
+    val storeData = StoreData()
     val activityContext = this
+    private val dateFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
+    private val timeFomat: DateTimeFormatter = DateTimeFormatter.ofPattern("hh:mm a")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.alert)
@@ -26,7 +31,13 @@ class AlertActivity: ComponentActivity() {
 
             override fun onFinish() {
                 progressBar.progress = 0
-                storeFall.saveData(activityContext)
+                val newFall = DataFall(
+                    id = 0,
+                    ubicacion = "Guayaquil, Guayas, Ecuador",
+                    fecha = LocalDate.now().format(dateFormat),
+                    hora = LocalTime.now().format(timeFomat)
+                )
+                storeData.saveData(activityContext, newFall)
                 finish()
             }
         }

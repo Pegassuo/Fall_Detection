@@ -10,8 +10,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.falldetection.R
 import com.google.android.material.chip.Chip
 
-class ChipAdapter (private val dataList: MutableList<DataFall>): RecyclerView.Adapter<ChipAdapter.ChipViewHolder>(){
-    val storeFall = StoreFall()
+class ChipAdapter<T> (private val dataList: MutableList<T>): RecyclerView.Adapter<ChipAdapter<T>.ChipViewHolder>() where T: Any{
+    val storeData = StoreData()
     private lateinit var context : Context
     inner class ChipViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
         val chip: Chip = itemView.findViewById(R.id.chip)
@@ -27,8 +27,19 @@ class ChipAdapter (private val dataList: MutableList<DataFall>): RecyclerView.Ad
     override fun getItemCount(): Int = dataList.size
 
     override fun onBindViewHolder(holder: ChipViewHolder, position: Int) {
-        val dataFall = dataList[position]
-        holder.chip.text = dataFall.fecha
+        val item = dataList[position]
+
+        when(item){
+            is DataFall -> {
+                holder.chip.text = item.fecha
+            }
+            is DataContact -> {
+                holder.chip.text = item.name
+            }
+            else -> {
+                Log.e(TAG, "Unexpected item type: ${item.javaClass}")
+            }
+        }
 
         holder.chip.setOnClickListener {
             dataList.removeAt(position)
@@ -36,7 +47,11 @@ class ChipAdapter (private val dataList: MutableList<DataFall>): RecyclerView.Ad
             notifyItemRangeChanged(position, dataList.size)
 
             try{
-                storeFall.saveJson(context, dataList)
+                storeData.saveJson(context, dataList as MutableList<out Any>, when(item){
+                    is DataFall -> "falls"
+                    is DataContact -> "contacts"
+                    else -> ""
+                })
             }catch(e: Exception){
                 Log.e(TAG, "Error saving data: ${e.message}")
             }

@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class DataFall (
-    val id: Int,
+    var id: Int,
     val ubicacion: String,
     val fecha: String,
     val hora: String
