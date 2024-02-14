@@ -5,7 +5,8 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class DataFall (
     var id: Int,
-    val ubicacion: String,
+    var latitude: Double,
+    var longitude: Double,
     val fecha: String,
     val hora: String
 )
