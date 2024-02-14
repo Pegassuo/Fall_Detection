@@ -1,8 +1,6 @@
 package com.example.falldetection.presentation
 
-import android.content.ContentValues.TAG
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import androidx.activity.ComponentActivity
@@ -26,8 +24,6 @@ class ContactsActivity: ComponentActivity() {
 
 
         val dataContactList = storeData.getData(this, DataContact::class.java)
-
-        Log.d(TAG, dataContactList.toString())
 
         //Load history of contacts
         if (dataContactList != null){
