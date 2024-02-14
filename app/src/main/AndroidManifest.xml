@@ -2,12 +2,16 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <!-- Permiso para sensores-->
+    <!-- Permiso para sensores de movimiento-->
     <uses-permission android:name="android.permission.BODY_SENSORS" />
-    <!-- Lectura rapida-->
-    <uses-permission android:name="android.permission.HIGH_SAMPLING_RATE_SENSORS"/>
-    <!-- Permiso para sensores en segundo plano-->
-    <!-- <uses-permission android:name="android.permission.BODY_SENSORS_BACKGROUND"/> -->
+    <uses-permission android:name="android.permission.BODY_SENSORS_BACKGROUND"/>
+    <uses-permission android:name="android.permission.HIGH_SAMPLING_RATE_SENSORS" />
+    <!-- Permiso para acceder a la ubicación-->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <!-- Permiso para servicio en primer plano y acceso a notificaciones -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <uses-feature android:name="android.hardware.type.watch" />
 
@@ -52,6 +56,9 @@
             android:label="Alert"
             android:theme="@android:style/Theme.DeviceDefault">
         </activity>
+        
+        <service android:name=".presentation.FallDetectionService"
+            android:enabled="true" />
     </application>
 
 </manifest>
