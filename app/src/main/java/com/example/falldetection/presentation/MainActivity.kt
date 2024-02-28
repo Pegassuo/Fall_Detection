@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import androidx.activity.ComponentActivity
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
@@ -40,6 +41,12 @@ class MainActivity : ComponentActivity() {
 
         val localBroadcastManager = LocalBroadcastManager.getInstance(this)
         localBroadcastManager.registerReceiver(receiver, IntentFilter("fall_detected"))
+
+        /* Write empty array in falls on physical watch
+        val empty = mutableListOf<String>()
+        storeData.saveJson(this, empty, "falls")
+        storeData.saveJson(this, empty, "contacts")
+         */
 
         val dataFallList = storeData.getData(this, DataFall::class.java)
 

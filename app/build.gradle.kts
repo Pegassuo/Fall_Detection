@@ -64,4 +64,6 @@ dependencies {
     implementation("com.google.code.gson:gson:2.8.8")
     implementation("com.google.android.material:material:1.11.0")
     implementation("com.google.android.gms:play-services-location:21.1.0")
+    implementation("aws.sdk.kotlin:sns:1.0.62")
+    implementation("io.github.cdimascio:dotenv-kotlin:6.4.1")
 }
