@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.falldetection.R
 
 class ContactsActivity: ComponentActivity() {
-    val storeData = StoreData()
+    private val storeData = StoreData()
     private lateinit var saveContactButton: Button
     private lateinit var textName: EditText
     private lateinit var textPhone: EditText
@@ -43,6 +43,8 @@ class ContactsActivity: ComponentActivity() {
                 )
                 storeData.saveData(this, newContact)
             }
+            textName.setText("")
+            textPhone.setText("")
         }
 
     }

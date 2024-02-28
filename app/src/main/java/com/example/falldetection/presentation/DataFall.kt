@@ -8,5 +8,6 @@ data class DataFall (
     var latitude: Double,
     var longitude: Double,
     val fecha: String,
-    val hora: String
+    val hora: String,
+    val contacts: MutableList<DataContact>?
 )

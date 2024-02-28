@@ -87,12 +87,15 @@ class AlertActivity: ComponentActivity() {
         super.onDestroy()
     }
     private fun sendAlert(){
+        val dataContactList = storeData.getData(this, DataContact::class.java)
+
         val newFall = DataFall(
             id = 0,
             latitude = 0.0,
             longitude = 0.0,
             fecha = LocalDate.now().format(dateFormat),
-            hora = LocalTime.now().format(timeFormat)
+            hora = LocalTime.now().format(timeFormat),
+            contacts = dataContactList
         )
         if(checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
             getLocation(newFall) { updatedNewFall ->
