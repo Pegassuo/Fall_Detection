@@ -1,10 +1,4 @@
 <resources>
-    <!-- COLORES -->
-    <color name="black">#000000</color>
-    <color name="white">#FFFFFF</color>
-    <color name="purple">#BB86FC</color>
-    <color name="gray">#808080</color>
-    <!-- STRINGS -->
     <string name="app_title">Fall Detection</string>
     <string name="init_values">Collecting Data...</string>
     <string name="send_alert">Send Alert!</string>

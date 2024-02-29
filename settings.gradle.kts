@@ -15,3 +15,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "FallDetection"
 include(":app")
+include(":falldetectionphone")
