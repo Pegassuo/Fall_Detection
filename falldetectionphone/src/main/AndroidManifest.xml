@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FallDetection">
 
-        <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyDNYGPtA56up3HBiAHn7fsd6s64Cm0nbpw"/>
+        <meta-data android:name="com.google.android.geo.API_KEY" android:value="value"/>
 
         <activity
             android:name=".MainActivity"
