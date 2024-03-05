@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="20dp">
+    
+    <TextView
+        android:id="@+id/fall_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Fecha"
+        android:textStyle="bold"
+        android:textSize="30sp"/>
+
+    <TextView
+        android:id="@+id/fall_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Hora"/>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="120dp">
+
+        <com.google.android.gms.maps.MapView
+            android:id="@+id/fall_location_map"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </FrameLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Contacted Numbers:"
+        android:textStyle="bold"/>
+
+    <ListView
+        android:id="@+id/contacted_numbers_list"
+        android:layout_width="match_parent"
+        android:layout_height="130dp"/>
+
+</LinearLayout>
