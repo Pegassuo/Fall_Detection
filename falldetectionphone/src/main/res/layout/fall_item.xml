@@ -2,8 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="20dp">
+    android:layout_height="wrap_content">
     
     <TextView
         android:id="@+id/fall_date"
@@ -19,7 +18,15 @@
         android:layout_height="wrap_content"
         android:text="Hora"/>
 
+    <TextView
+        android:id="@+id/gps_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:text="No hay registro de ubicación dispnible"/>
+
     <FrameLayout
+        android:id="@+id/gps_frame"
         android:layout_width="match_parent"
         android:layout_height="120dp">
 
@@ -39,6 +46,6 @@
     <ListView
         android:id="@+id/contacted_numbers_list"
         android:layout_width="match_parent"
-        android:layout_height="130dp"/>
+        android:layout_height="wrap_content"/>
 
 </LinearLayout>
