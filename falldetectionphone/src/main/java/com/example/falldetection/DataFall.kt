@@ -1,4 +1,4 @@
-package com.example.falldetectionphone
+package com.example.falldetection
 
 import kotlinx.serialization.Serializable
 
