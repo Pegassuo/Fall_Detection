@@ -1,4 +1,4 @@
-package com.example.falldetection.presentation
+package com.example.falldetection
 
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -10,14 +10,21 @@ import android.widget.Button
 import androidx.activity.ComponentActivity
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.falldetection.R
+import com.google.android.gms.wearable.MessageClient
+import com.google.android.gms.wearable.MessageEvent
+import com.google.android.gms.wearable.PutDataMapRequest
+import com.google.android.gms.wearable.Wearable
+import com.google.gson.Gson
+import java.nio.charset.StandardCharsets
 
-class MainActivity : ComponentActivity() {
+class MainActivity : ComponentActivity(), MessageClient.OnMessageReceivedListener {
     private val storeData = StoreData()
     private lateinit var recyclerView: RecyclerView
     //Button
     private lateinit var sendAlertButton: Button
     private lateinit var contactsButton: Button
+
+    private val mMessageClient by lazy { Wearable.getMessageClient(this) }
 
     private val receiver = object: BroadcastReceiver(){
         override fun onReceive(context: Context?, intent: Intent?) {
@@ -48,6 +55,8 @@ class MainActivity : ComponentActivity() {
         storeData.saveJson(this, empty, "contacts")
          */
 
+        mMessageClient.addListener(this)
+
         val dataFallList = storeData.getData(this, DataFall::class.java)
 
         //Load history of falls
@@ -69,9 +78,10 @@ class MainActivity : ComponentActivity() {
     }
 
     override fun onDestroy() {
-        super.onDestroy()
         val localBroadcastManager = LocalBroadcastManager.getInstance(this)
         localBroadcastManager.registerReceiver(receiver, IntentFilter("fall_detected"))
+        mMessageClient.removeListener(this)
+        super.onDestroy()
     }
 
     override fun onResume() {
@@ -82,6 +92,23 @@ class MainActivity : ComponentActivity() {
             recyclerView.adapter = adapter
             adapter.notifyDataSetChanged()
         }
+    }
+
+    override fun onMessageReceived(messageEvent: MessageEvent) {
+        if (messageEvent.path == "/request_fall_data") {
+            Log.d("Wear", "Received request for fall data")
+            val dataFallList = storeData.getData(this, DataFall::class.java)
+            if (dataFallList != null) {
+                sendFallDataToPhone(dataFallList)
+            }
+        }
+    }
+
+    private fun sendFallDataToPhone(fallList: List<DataFall>){
+        val request = PutDataMapRequest.create("/fall_data")
+        val jsonString = Gson().toJson(fallList)
+        val requestMessage = request.asPutDataRequest()
+        mMessageClient.sendMessage(requestMessage.uri.host.toString(), requestMessage.uri.path.toString(), jsonString.toByteArray(StandardCharsets.UTF_8))
     }
 
 }

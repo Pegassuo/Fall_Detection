@@ -1,11 +1,10 @@
-package com.example.falldetection.presentation
+package com.example.falldetection
 
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import androidx.activity.ComponentActivity
 import androidx.recyclerview.widget.RecyclerView
-import com.example.falldetection.R
 
 class ContactsActivity: ComponentActivity() {
     private val storeData = StoreData()
@@ -13,6 +12,8 @@ class ContactsActivity: ComponentActivity() {
     private lateinit var textName: EditText
     private lateinit var textPhone: EditText
     private lateinit var recyclerView: RecyclerView
+    private lateinit var adapter: ChipAdapter<DataContact>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.contacts)
@@ -22,16 +23,13 @@ class ContactsActivity: ComponentActivity() {
         textPhone = findViewById(R.id.textPhone)
         recyclerView = findViewById(R.id.recycler_view_contacts)
 
+        adapter = ChipAdapter(mutableListOf())
+        recyclerView.adapter = adapter
 
         val dataContactList = storeData.getData(this, DataContact::class.java)
-
-        //Load history of contacts
-        if (dataContactList != null){
-            val adapter = ChipAdapter<DataContact>(dataContactList)
-            recyclerView.adapter = adapter
-            adapter.notifyDataSetChanged()
+        dataContactList?.let{
+            adapter.updateData(it)
         }
-
 
         saveContactButton.setOnClickListener{
             val nameString = textName.text.toString()
@@ -42,6 +40,12 @@ class ContactsActivity: ComponentActivity() {
                     number = numberString
                 )
                 storeData.saveData(this, newContact)
+
+                val updatedDataContactList = storeData.getData(this, DataContact::class.java)
+                updatedDataContactList?.let {
+                    adapter.updateData(it)
+                }
+
             }
             textName.setText("")
             textPhone.setText("")

@@ -1,4 +1,4 @@
-package com.example.falldetection.presentation
+package com.example.falldetection
 
 import android.content.ContentValues.TAG
 import android.content.Context
@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.falldetection.R
 import com.google.android.material.chip.Chip
 
 class ChipAdapter<T> (private val dataList: MutableList<T>): RecyclerView.Adapter<ChipAdapter<T>.ChipViewHolder>() where T: Any{
@@ -28,6 +27,8 @@ class ChipAdapter<T> (private val dataList: MutableList<T>): RecyclerView.Adapte
 
     override fun onBindViewHolder(holder: ChipViewHolder, position: Int) {
         val item = dataList[position]
+
+        Log.d(TAG, "Binding item at position $position: $item")
 
         when(item){
             is DataFall -> {
@@ -56,5 +57,11 @@ class ChipAdapter<T> (private val dataList: MutableList<T>): RecyclerView.Adapte
                 Log.e(TAG, "Error saving data: ${e.message}")
             }
         }
+    }
+
+    fun updateData(newDataList: List<T>) {
+        dataList.clear()
+        dataList.addAll(newDataList)
+        notifyDataSetChanged()
     }
 }

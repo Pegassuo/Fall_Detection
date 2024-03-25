@@ -1,9 +1,8 @@
-package com.example.falldetection.presentation
+package com.example.falldetection
 
 import android.Manifest
 import android.content.pm.PackageManager
 import android.media.MediaPlayer
-import android.os.Build
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.util.Log
@@ -14,7 +13,6 @@ import aws.sdk.kotlin.runtime.auth.credentials.StaticCredentialsProvider
 import aws.sdk.kotlin.services.sns.SnsClient
 import aws.sdk.kotlin.services.sns.model.MessageAttributeValue
 import aws.sdk.kotlin.services.sns.model.PublishRequest
-import com.example.falldetection.R
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest

@@ -1,4 +1,4 @@
-package com.example.falldetection.presentation
+package com.example.falldetection
 
 import android.util.Log
 import android.content.ContentValues.TAG

@@ -1,4 +1,4 @@
-package com.example.falldetection.presentation
+package com.example.falldetection
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -13,7 +13,6 @@ import android.os.IBinder
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import com.example.falldetection.R
 import kotlin.math.sqrt
 
 

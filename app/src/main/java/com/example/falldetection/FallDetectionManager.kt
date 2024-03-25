@@ -1,4 +1,4 @@
-package com.example.falldetection.presentation
+package com.example.falldetection
 
 object FallDetectionManager {
     private var isAlertActivityRunning = false
