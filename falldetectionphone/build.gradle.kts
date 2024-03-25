@@ -1,14 +1,15 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("kotlinx-serialization")
 }
 
 android {
-    namespace = "com.example.falldetectionphone"
+    namespace = "com.example.falldetection"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.falldetectionphone"
+        applicationId = "com.example.falldetection"
         minSdk = 34
         targetSdk = 34
         versionCode = 1
