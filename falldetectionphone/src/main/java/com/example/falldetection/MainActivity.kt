@@ -2,22 +2,20 @@ package com.example.falldetection
 
 import android.os.Bundle
 import android.util.Log
+import android.widget.TextView
 import androidx.activity.ComponentActivity
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.gms.wearable.DataClient
-import com.google.android.gms.wearable.DataMapItem
 import com.google.android.gms.wearable.MessageClient
 import com.google.android.gms.wearable.MessageEvent
 import com.google.android.gms.wearable.PutDataMapRequest
 import com.google.android.gms.wearable.Wearable
 import com.google.gson.Gson
-import org.json.JSONArray
-import org.json.JSONObject
 import java.io.File
 import java.io.FileOutputStream
 import java.nio.charset.StandardCharsets
 
 class MainActivity : ComponentActivity(), MessageClient.OnMessageReceivedListener {
+    private lateinit var fallCounts: TextView
     private lateinit var fallList: List<DataFall>
     private lateinit var fallAdapter: FallDataAdapter
     private val mMessageClient by lazy { Wearable.getMessageClient(this) }
@@ -27,9 +25,12 @@ class MainActivity : ComponentActivity(), MessageClient.OnMessageReceivedListene
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main)
 
+        fallCounts = findViewById(R.id.fall_counts)
+
         mMessageClient.addListener(this)
 
         fallList = loadFallDataFromLocalFile()
+        fallCounts.text = "${fallList.size} registradas"
 
 
         val fallRecyclerView = findViewById<RecyclerView>(R.id.fall_list)

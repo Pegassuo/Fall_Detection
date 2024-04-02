@@ -4,15 +4,18 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import android.widget.FrameLayout
 import android.widget.ListView
+import android.widget.SimpleAdapter
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 class FallDataAdapter(private var fallList: List<DataFall>): RecyclerView.Adapter<FallDataAdapter.ViewHolder>() {
 
@@ -35,7 +38,7 @@ class FallDataAdapter(private var fallList: List<DataFall>): RecyclerView.Adapte
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val fall = fallList[position]
-        holder.fallDate.text = fall.fecha
+        holder.fallDate.text = formatDate(fall.fecha)
         holder.fallTime.text = fall.hora
 
         if(fall.latitude == 0.0 && fall.longitude == 0.0){
@@ -50,24 +53,37 @@ class FallDataAdapter(private var fallList: List<DataFall>): RecyclerView.Adapte
             }
         }
 
-        val contactAdapter = fall.contacts?.let {
-            ArrayAdapter<String>(
-                mContext,
-                android.R.layout.simple_list_item_1,
-                it.map { it.name + " - " + it.number}
-            )
+        val contactList = if (fall.contacts.isNullOrEmpty()) {
+            listOf(mapOf("name" to "No se informaron contactos", "number" to ""))
+        } else {
+            fall.contacts.map { mapOf("name" to it.name, "number" to it.number) }
         }
-        holder.contactedNumbersList.adapter = contactAdapter
 
-        contactAdapter?.let { adapter ->
+        val contactAdapter = SimpleAdapter(
+            mContext,
+            contactList,
+            R.layout.contact_list_item,
+            arrayOf("name", "number"),
+            intArrayOf(R.id.contact_info)
+        )
+
+        holder.contactedNumbersList.adapter = contactAdapter
+        holder.contactedNumbersList.divider = null
+
+        contactAdapter.let { adapter ->
             val totalHeight = calculateListViewHeight(holder.contactedNumbersList, adapter)
             val params = holder.contactedNumbersList.layoutParams
             params.height = totalHeight
             holder.contactedNumbersList.layoutParams = params
         }
-
     }
-    private fun calculateListViewHeight(listView: ListView, adapter: ArrayAdapter<String>): Int {
+    private fun formatDate(inputDate: String): String {
+        val formatterInput = DateTimeFormatter.ofPattern("dd-MM-yyyy")
+        val formatterOutput = DateTimeFormatter.ofPattern("dd 'de' MMMM 'de' yyyy", Locale("es", "ES"))
+        val date = LocalDate.parse(inputDate, formatterInput)
+        return formatterOutput.format(date)
+    }
+    private fun calculateListViewHeight(listView: ListView, adapter: SimpleAdapter): Int {
         var totalHeight = 0
         for (i in 0 until adapter.count) {
             val listItem = adapter.getView(i, null, listView)
