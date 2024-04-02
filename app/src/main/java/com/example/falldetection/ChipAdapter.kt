@@ -28,8 +28,6 @@ class ChipAdapter<T> (private val dataList: MutableList<T>): RecyclerView.Adapte
     override fun onBindViewHolder(holder: ChipViewHolder, position: Int) {
         val item = dataList[position]
 
-        Log.d(TAG, "Binding item at position $position: $item")
-
         when(item){
             is DataFall -> {
                 holder.chip.text = item.fecha
