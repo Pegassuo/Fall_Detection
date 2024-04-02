@@ -100,19 +100,22 @@ class AlertActivity: ComponentActivity() {
                 storeData.saveData(activityContext, updatedNewFall)
                 /* No activar hasta querer hacer pruebas con sms
                 CoroutineScope(Dispatchers.IO).launch {
-                    pubTextSMS("Una caída ha sido detectada ${newFall.fecha} ${newFall.hora} en la siguiente ubicación https://www.google.com/maps/search/?api=1&query=${newFall.latitude},${newFall.longitude}"
+                    pubTextSMS("Una caída ha sido detectada en este lugar https://www.google.com/maps/search/?api=1&query=${newFall.latitude},${newFall.longitude}"
                         , "+593969432043")
                 }
                  */
             }
         }else{
             storeData.saveData(activityContext, newFall)
-            /* No activar hasta querer hacer pruebas con sms
-            CoroutineScope(Dispatchers.IO).launch {
-                pubTextSMS("Una caída ha sido detectada ${newFall.fecha} ${newFall.hora}"
+            if(!dataContactList.isNullOrEmpty()){
+                /*
+                No activar hasta querer hacer pruebas con sms
+                CoroutineScope(Dispatchers.IO).launch {
+                    pubTextSMS("Una caída ha sido detectada ${newFall.fecha} ${newFall.hora}"
                     , "+593969432043")
+                }
+                */
             }
-             */
         }
 
         audioPlayer = MediaPlayer.create(this@AlertActivity, R.raw.alarm)
