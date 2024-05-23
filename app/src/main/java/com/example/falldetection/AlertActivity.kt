@@ -41,10 +41,10 @@ class AlertActivity: ComponentActivity() {
         LocationServices.getFusedLocationProviderClient(this)
     }
     override fun onCreate(savedInstanceState: Bundle?) {
+        FallDetectionManager.setAlertActivityRunning(true)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.alert)
 
-        FallDetectionManager.setAlertActivityRunning(true)
         acceptButton = findViewById(R.id.acceptButton)
         declineButton = findViewById(R.id.declineButton)
         progressBar = findViewById(R.id.progressBar)
